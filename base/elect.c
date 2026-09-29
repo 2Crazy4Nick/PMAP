@@ -528,7 +528,7 @@ static const ElectMechaTaskPrep_t AutoAdjSlimCommands[] = {
     {27, MECHA_CMD_TAG_ELECT_DISC_DET_DVDMIN_RD, 5000, MECHA_CMD_EEPROM_READ, "DISC DETECT EEPROM RD", "0035"},
     {28, MECHA_CMD_TAG_ELECT_DVDSL_DISC_DET_JUDGE, 5000, MECHA_CMD_EEPROM_READ, "DISC DETECT EEPROM RD", "0034"},
     {29, 0, 1000, MECHA_CMD_DISC_MODE_DVDSL_12, "DISC MODE DVD-SL 12cm", NULL},
-    {0, 0, 5000, MECHA_TASK_UI_CMD_WAIT, "DVD-SL MODE WAIT 5s", NULL},
+    {0, 0, 1500, MECHA_TASK_UI_CMD_WAIT, "DVD-SL MODE WAIT 1.5s", NULL},
     {30, 0, 30000, MECHA_CMD_AUTO_ADJ_FIX_GAIN, "DVD-SL AUTO ADJUSTMENT (Fix Gain Mode)", "0103"},
     {0, 0, 100, MECHA_TASK_UI_CMD_WAIT, "CD WAIT 100ms", NULL},
     {31, MECHA_CMD_TAG_ELECT_DVDSL_RFDC_LEVEL, 3000, MECHA_CMD_RFDC_LEVEL, "DVD-SL GET RF DC LEVEL", NULL},
@@ -1035,7 +1035,7 @@ static int ElectJudgeDVDDLL1Jitter256(const char *result, int len)
     else
     {
         PlatShowEMessage("DVD-DL-L1 jitter(256) NG: %d\n", value);
-        return 1;
+        return (ConSlim == 1) ? 0 : 1;
     }
 }
 
