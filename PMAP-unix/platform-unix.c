@@ -60,16 +60,14 @@ int PlatOpenCOMPort(const char *device)
                 return errno;
             }
 
+            cfmakeraw(&options);
             cfsetispeed(&options, B57600);
             cfsetospeed(&options, B57600);
-            options.c_cflag &= ~PARENB; // No parity
-            options.c_cflag &= ~CSTOPB; // 1 stop bit
+            options.c_cflag &= ~PARENB;  // No parity
+            options.c_cflag &= ~CSTOPB;  // 1 stop bit
             options.c_cflag &= ~CSIZE;
-            options.c_cflag |= CS8;                     // 8 data bits
-            options.c_cflag &= ~CRTSCTS;                // No hardware flow control
-            options.c_iflag &= ~(IXON | IXOFF | IXANY); // No software flow control
-            options.c_lflag = 0;
-            options.c_oflag = 0;
+            options.c_cflag |= CS8 | CREAD | CLOCAL; // 8 data bits, enable receiver, ignore modem control
+            options.c_cflag &= ~CRTSCTS;             // No hardware flow control
 
             if (tcsetattr(ComPortHandle, TCSANOW, &options) == -1)
             {
