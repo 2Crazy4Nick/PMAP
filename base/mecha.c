@@ -116,6 +116,9 @@ int MechaCommandExecuteList(MechaCommandTxHandler_t transmit, MechaCommandRxHand
 
     for (i = 0, task = tasks; i < TaskCount; i++, task++)
     {
+        size        = 0;
+        RxBuffer[0] = '\0';
+
         if (transmit != NULL)
         {
             if ((result = transmit(task)) != 0)
@@ -158,18 +161,17 @@ int MechaCommandExecuteList(MechaCommandTxHandler_t transmit, MechaCommandRxHand
         }
         else
         {
-
             if (result == -EPIPE)
             {
-                if (!is_valid_data(RxBuffer, size))
-                {
-                    PlatShowEMessage("Error: Connection problems, received invalid data for task ID %02d.\n", task->id);
-                    result = -1; // Indicate an error
-                    break;
-                }
+                size = strlen(RxBuffer);
 
-                PlatShowEMessage("%02d. %04x%s %s: 101 - rx-Command timed out\n", task->id, task->command, task->args, task->label);
+                if (size > 0 && !is_valid_data(RxBuffer, size))
+                    PlatShowEMessage("Error: Connection problems, received invalid data for task ID %02d.\n", task->id);
+                else
+                    PlatShowEMessage("%02d. %04x%s %s: 101 - rx-Command timed out\n", task->id, task->command, task->args, task->label);
             }
+
+            break;
         }
 
         if (receive != NULL)
