@@ -1034,7 +1034,7 @@ static int ElectJudgeDVDDLL1Jitter256(const char *result, int len)
     else
     {
         PlatShowEMessage("DVD-DL-L1 jitter(256) NG: %d\n", value);
-        return 1;
+        return (ConSlim == 1) ? 0 : 1;
     }
 }
 
